@@ -4,7 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
+export default function Page() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,13 +28,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex bg-gray-100 justify-center items-center h-screen">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-md shadow-md"
+        className="p-6 border-2 border-gray-300 rounded-md bg-gray-50"
       >
         <h2 className="text-2xl mb-4">Login</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {error && <p className="mb-4">{error}</p>}
         <div className="mb-4">
           <label className="block mb-1">Username</label>
           <input
@@ -57,7 +57,7 @@ export default function LoginPage() {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-md"
+          className="w-full bg-blue-400 text-white py-2 rounded-md"
         >
           Login
         </button>
