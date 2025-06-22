@@ -2,14 +2,14 @@
 
 import { useCollectionStore } from "@/store/collections";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { Meta } from "@/types/collection-response";
 import { useSearchParams } from "next/navigation";
 import Pagination from "@/app/ui/pagination";
 import { getCollections } from "@/app/lib/collections-api";
 import CollectionTable from "@/app/ui/dashboard/collection-table";
 
-export default function Page() {
+function CollectionPageContent() {
   const { collections, setCollections } = useCollectionStore();
   const { data: session } = useSession();
   const [loading, setLoading] = useState(true);
@@ -73,5 +73,13 @@ export default function Page() {
         <Pagination totalPages={meta?.totalPages || 0} />
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CollectionPageContent />
+    </Suspense>
   );
 }
