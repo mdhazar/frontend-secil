@@ -98,7 +98,7 @@ export default function FilterModal({
 
   return (
     <div
-      className="absolute bottom-0 flex items-end justify-center border-t border-gray-200"
+      className="absolute bottom-0  flex items-end justify-center border-t border-gray-200"
       onClick={handleBackdropClick}
     >
       <div className="bg-gray-50 overflow-hidden animate-slide-up w-[97%] ">

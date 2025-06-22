@@ -117,13 +117,11 @@ export default function CollectionEditPage() {
   };
 
   const handleSave = () => {
-    // TODO: Implement save functionality
     console.log("Saving selected products:", selectedProducts);
   };
 
   const handleCancel = () => {
     resetEditState();
-    window.history.back();
   };
 
   const handleApplyFilters = async (
