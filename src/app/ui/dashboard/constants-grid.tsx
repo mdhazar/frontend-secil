@@ -1,6 +1,5 @@
 import DroppableSlot from "./droppable-slot";
 import GridLayoutControls from "./grid-layout-controls";
-import Pagination from "@/app/ui/pagination";
 
 interface Product {
   imageUrl: string;
@@ -56,8 +55,6 @@ export default function ConstantsGrid({
             ))}
           </div>
         </div>
-
-        <Pagination totalPages={5} />
       </div>
     </div>
   );

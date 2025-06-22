@@ -17,12 +17,11 @@ export const useCollectionStore = create<CollectionState>()((set) => ({
   setCollections: (collections) => set({ collections }),
 }));
 
-// New store for edit mode and products
 interface Product {
   imageUrl: string;
   name: string;
   productCode: string;
-  id: string; // We'll generate this for drag/drop
+  id: string;
 }
 
 interface EditModeState {
