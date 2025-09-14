@@ -44,8 +44,9 @@ export default function Page() {
         }));
         setAvailableProducts(mapped);
         setFilteredProducts(mapped);
-      } catch (e: any) {
-        setError(e?.message || "Failed to load products");
+      } catch (e) {
+        const err = e as Error;
+        setError(err.message || "Failed to load products");
       } finally {
         setLoading(false);
       }

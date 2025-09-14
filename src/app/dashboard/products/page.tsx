@@ -2,13 +2,17 @@
 
 import { useEffect, useMemo, useState } from "react";
 import ProductCard2 from "@/app/ui/dashboard/product-card2";
-import { getAllProducts, getCategories } from "@/app/lib/fakestore-api";
+import {
+  getAllProducts,
+  getCategories,
+  FakeStoreProduct,
+} from "@/app/lib/fakestore-api";
 import { useCartStore } from "@/store/cart";
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<FakeStoreProduct[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [searchText, setSearchText] = useState("");
@@ -27,8 +31,9 @@ export default function Page() {
         ]);
         setProducts(prods);
         setCategories(cats);
-      } catch (e: any) {
-        setError(e?.message || "Failed to load products");
+      } catch (e) {
+        const err = e as Error;
+        setError(err.message || "Failed to load products");
       } finally {
         setLoading(false);
       }
@@ -112,7 +117,7 @@ export default function Page() {
         </div>
 
         <div className="flex flex-wrap gap-4">
-          {filtered.map((p: any) => (
+          {filtered.map((p: FakeStoreProduct) => (
             <ProductCard2
               key={p.id}
               imageUrl={p.image}
