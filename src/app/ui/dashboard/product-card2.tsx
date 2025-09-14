@@ -1,5 +1,6 @@
 import Image from "next/image";
 import clsx from "clsx";
+import { ImagePlaceholderIcon } from "@/app/ui/icons";
 
 interface ProductCard2Props {
   imageUrl?: string;
@@ -7,6 +8,7 @@ interface ProductCard2Props {
   productId?: string;
   className?: string;
   useFixedWidth?: boolean;
+  onAddToCartClick?: () => void;
 }
 
 export default function ProductCard2({
@@ -15,6 +17,7 @@ export default function ProductCard2({
   productId,
   className,
   useFixedWidth = true,
+  onAddToCartClick,
 }: ProductCard2Props) {
   return (
     <div
@@ -41,8 +44,8 @@ export default function ProductCard2({
               height={125}
             />
           ) : (
-            <div className="w-full h-full bg-gray-200 flex ">
-              <span className="text-gray-400 text-xs">No Image</span>
+            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+              <ImagePlaceholderIcon className="w-8 h-8 text-gray-400" />
             </div>
           )}
         </div>
@@ -69,6 +72,16 @@ export default function ProductCard2({
           </p>
         </div>
       </div>
+      {onAddToCartClick && (
+        <div className="px-2 pb-2">
+          <button
+            onClick={onAddToCartClick}
+            className="w-full text-xs bg-blue-500 text-white py-1 rounded hover:bg-blue-600"
+          >
+            Add to Cart
+          </button>
+        </div>
+      )}
     </div>
   );
 }

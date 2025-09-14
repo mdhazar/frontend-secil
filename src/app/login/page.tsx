@@ -23,7 +23,7 @@ export default function Page() {
     if (result?.error) {
       setError("Invalid username or password");
     } else {
-      router.push("/dashboard/collection");
+      router.push("/dashboard/products");
     }
   };
 

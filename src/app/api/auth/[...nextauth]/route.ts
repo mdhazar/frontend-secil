@@ -10,32 +10,27 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials) {
-          return null;
-        }
+        if (!credentials) return null;
 
         try {
-          const res = await fetch(
-            "https://maestro-api-dev.secil.biz/Auth/Login",
-            {
-              method: "POST",
-              body: JSON.stringify({
-                userName: credentials.username,
-                password: credentials.password,
-              }),
-              headers: { "Content-Type": "application/json" },
-            }
-          );
-          const response = await res.json();
+          const res = await fetch("https://fakestoreapi.com/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              username: credentials.username,
+              password: credentials.password,
+            }),
+          });
 
-          if (response.status === 0 && response.data) {
+          if (!res.ok) return null;
+          const data = await res.json();
+          if (data && typeof data.token === "string" && data.token.length > 0) {
             return {
-              ...response.data,
-              id: response.data.accessToken,
-            };
-          } else {
-            return null;
+              id: data.token,
+              accessToken: data.token,
+            } as any;
           }
+          return null;
         } catch (e) {
           console.error(e);
           return null;
@@ -45,18 +40,14 @@ const handler = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.accessToken = user.accessToken;
-        token.refreshToken = user.refreshToken;
-        token.expiresIn = user.expiresIn;
+      if (user && (user as any).accessToken) {
+        token.accessToken = (user as any).accessToken;
       }
       return token;
     },
     async session({ session, token }) {
-      if (token) {
-        session.accessToken = token.accessToken;
-        session.refreshToken = token.refreshToken;
-        session.expiresIn = token.expiresIn;
+      if (token && (token as any).accessToken) {
+        session.accessToken = (token as any).accessToken as string | undefined;
       }
       return session;
     },

@@ -1,4 +1,4 @@
-import DroppableSlot from "./droppable-slot";
+import DroppableSlot from "@/app/ui/dashboard/droppable-slot";
 import GridLayoutControls from "./grid-layout-controls";
 
 interface Product {
@@ -33,7 +33,7 @@ export default function ConstantsGrid({
   return (
     <div className="flex-1 bg-white rounded-md p-2 flex flex-col max-h-[600px]">
       <div className="mb-1 flex-shrink-0 flex items-center justify-between">
-        <h3 className="font-medium text-gray-900">Sabitler</h3>
+        <h3 className="font-medium text-gray-900">Pinned</h3>
         <GridLayoutControls
           gridLayout={gridLayout}
           onGridLayoutChange={onGridLayoutChange}

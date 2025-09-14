@@ -21,7 +21,7 @@ export default function ProductGrid({
   return (
     <div className="flex-1 bg-white rounded-md p-2 flex flex-col max-h-[600px]">
       <div className="mb-1 flex-shrink-0">
-        <h3 className="font-medium text-gray-900">Koleksiyon Ürünleri</h3>
+        <h3 className="font-medium text-gray-900">Products</h3>
       </div>
 
       <div className="flex-1 overflow-y-auto border">

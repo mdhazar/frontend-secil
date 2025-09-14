@@ -46,7 +46,7 @@ export default function DraggableProduct({
       {isSelected ? (
         <div className="absolute inset-0 bg-opacity-20 flex items-center justify-center">
           <span className="bg-black w-full text-center text-white px-4 py-2 rounded text-sm font-medium">
-            Eklendi
+            Added
           </span>
         </div>
       ) : (
@@ -55,7 +55,7 @@ export default function DraggableProduct({
           className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all flex items-center justify-center opacity-0 group-hover:opacity-50"
         >
           <span className="bg-black text-white px-3 py-1 rounded text-sm">
-            Ekle
+            Add
           </span>
         </button>
       )}

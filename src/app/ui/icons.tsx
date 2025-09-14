@@ -122,3 +122,16 @@ export const PlusIcon = ({ className }: { className?: string }) => (
     <path d="M12 8v8m-4-4h8"></path>
   </svg>
 );
+
+export const ImagePlaceholderIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+    <path d="M21 15l-5-5L5 21"></path>
+  </svg>
+);
