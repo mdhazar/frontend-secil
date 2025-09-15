@@ -2,6 +2,10 @@ import NextAuth from "next-auth";
 import type { User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
