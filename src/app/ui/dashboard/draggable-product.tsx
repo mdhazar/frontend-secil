@@ -1,11 +1,12 @@
 import { useDraggable } from "@dnd-kit/core";
-import ProductCard2 from "@/app/ui/dashboard/product-card2";
+import ProductCard from "@/app/ui/dashboard/product-card";
 
 interface Product {
   imageUrl: string;
   name: string;
   productCode: string;
   id: string;
+  price: number;
 }
 
 interface DraggableProductProps {
@@ -36,10 +37,11 @@ export default function DraggableProduct({
           isSelected ? "filter blur-sm" : ""
         } transition-all duration-200`}
       >
-        <ProductCard2
+        <ProductCard
           imageUrl={product.imageUrl}
-          productName={product.name}
-          productId={product.productCode}
+          name={product.name}
+          id={product.productCode}
+          priceText={`$${product.price.toFixed(2)}`}
         />
       </div>
 

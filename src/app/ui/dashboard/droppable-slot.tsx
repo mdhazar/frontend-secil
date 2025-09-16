@@ -1,5 +1,5 @@
 import { useDroppable } from "@dnd-kit/core";
-import ProductCard2 from "@/app/ui/dashboard/product-card2";
+import ProductCard from "@/app/ui/dashboard/product-card";
 import { TrashCanIcon } from "@/app/ui/icons";
 import { useState } from "react";
 
@@ -8,6 +8,7 @@ interface Product {
   name: string;
   productCode: string;
   id: string;
+  price: number;
 }
 
 interface DroppableSlotProps {
@@ -35,11 +36,11 @@ export default function DroppableSlot({
     >
       {selectedProduct ? (
         <div className="relative">
-          <ProductCard2
+          <ProductCard
             imageUrl={selectedProduct.imageUrl}
-            productName={selectedProduct.name}
-            productId={selectedProduct.productCode}
-            useFixedWidth={false}
+            name={selectedProduct.name}
+            id={selectedProduct.productCode}
+            priceText={`$${selectedProduct.price.toFixed(2)}`}
           />
           {isHover && (
             <button
@@ -51,12 +52,7 @@ export default function DroppableSlot({
           )}
         </div>
       ) : (
-        <ProductCard2
-          key={`placeholder-${index}`}
-          productName={" "}
-          productId={" "}
-          useFixedWidth={false}
-        />
+        <ProductCard key={`placeholder-${index}`} name={" "} id={" "} />
       )}
     </div>
   );

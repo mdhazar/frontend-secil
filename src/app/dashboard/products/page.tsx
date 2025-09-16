@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import ProductCard2 from "@/app/ui/dashboard/product-card2";
+import ProductCard from "@/app/ui/dashboard/product-card";
 import {
   getAllProducts,
   getCategories,
@@ -118,12 +118,13 @@ export default function Page() {
 
         <div className="flex flex-wrap gap-4">
           {filtered.map((p: FakeStoreProduct) => (
-            <ProductCard2
+            <ProductCard
               key={p.id}
               imageUrl={p.image}
-              productName={p.title}
-              productId={String(p.id)}
-              onAddToCartClick={() =>
+              name={p.title}
+              id={String(p.id)}
+              priceText={`$${p.price.toFixed(2)}`}
+              onAddToCart={() =>
                 addItem({
                   productId: p.id,
                   title: p.title,

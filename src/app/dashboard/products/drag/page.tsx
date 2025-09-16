@@ -8,7 +8,7 @@ import {
   DragStartEvent,
 } from "@dnd-kit/core";
 import { getAllProducts } from "@/app/lib/fakestore-api";
-import ProductCard2 from "@/app/ui/dashboard/product-card2";
+import ProductCard from "@/app/ui/dashboard/product-card";
 import ProductGrid from "@/app/ui/dashboard/product-grid";
 import ConstantsGrid from "@/app/ui/dashboard/constants-grid";
 
@@ -17,6 +17,7 @@ interface Product {
   name: string;
   productCode: string;
   id: string;
+  price: number;
 }
 
 type GridLayout = "2x2" | "3x2" | "4x4";
@@ -41,6 +42,7 @@ export default function Page() {
           name: p.title,
           productCode: String(p.id),
           id: `${p.id}-${idx}`,
+          price: p.price,
         }));
         setAvailableProducts(mapped);
         setFilteredProducts(mapped);
@@ -114,11 +116,9 @@ export default function Page() {
     const draggedProductData = active.data.current as Product;
     const dropSlotIndex = parseInt(over.id as string, 10);
 
-    // Place dragged product into the selectedProducts array at index
     setSelectedProducts((prev) => {
       const next = [...prev];
       next[dropSlotIndex] = draggedProductData;
-      // remove duplicates by id while preserving slot placement
       const seen = new Set<string>();
       for (let i = 0; i < next.length; i++) {
         const item = next[i];
@@ -171,10 +171,11 @@ export default function Page() {
 
       <DragOverlay>
         {draggedProduct && (
-          <ProductCard2
+          <ProductCard
             imageUrl={draggedProduct.imageUrl}
-            productName={draggedProduct.name}
-            productId={draggedProduct.productCode}
+            name={draggedProduct.name}
+            id={draggedProduct.productCode}
+            priceText={`$${draggedProduct.price.toFixed(2)}`}
           />
         )}
       </DragOverlay>

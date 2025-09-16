@@ -36,7 +36,7 @@ export default function Page() {
         <h2 className="text-2xl mb-4">Login</h2>
         {error && <p className="mb-4">{error}</p>}
         <div className="mb-4">
-          <label className="block mb-1">Username</label>
+          <label className="block mb-1">Username: mor_2314</label>
           <input
             type="text"
             value={username}
@@ -46,7 +46,7 @@ export default function Page() {
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Password</label>
+          <label className="block mb-1">Password: 83r5^_</label>
           <input
             type="password"
             value={password}

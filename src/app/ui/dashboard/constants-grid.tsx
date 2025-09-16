@@ -6,6 +6,7 @@ interface Product {
   name: string;
   productCode: string;
   id: string;
+  price: number;
 }
 
 interface GridConfig {
