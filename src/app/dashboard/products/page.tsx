@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import ProductCard from "@/app/ui/dashboard/product-card";
 import {
   getAllProducts,
@@ -18,7 +18,9 @@ export default function Page() {
   const [searchText, setSearchText] = useState("");
   const [minPrice, setMinPrice] = useState<string>("");
   const [maxPrice, setMaxPrice] = useState<string>("");
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const addItem = useCartStore((s) => s.addItem);
 
   useEffect(() => {
@@ -56,6 +58,23 @@ export default function Page() {
       return true;
     });
   }, [products, selectedCategory, searchText, minPrice, maxPrice]);
+
+  // Handle scroll events to show/hide scroll-to-top button
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const scrollTop = scrollContainerRef.current.scrollTop;
+      setShowScrollTop(scrollTop > 300);
+    }
+  };
+
+  const scrollToTop = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  };
 
   if (loading) return <div className="p-4">Loading...</div>;
   if (error) return <div className="p-4 text-red-600">{error}</div>;
@@ -116,24 +135,72 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-4">
-          {filtered.map((p: FakeStoreProduct) => (
-            <ProductCard
-              key={p.id}
-              imageUrl={p.image}
-              name={p.title}
-              id={String(p.id)}
-              priceText={`$${p.price.toFixed(2)}`}
-              onAddToCart={() =>
-                addItem({
-                  productId: p.id,
-                  title: p.title,
-                  image: p.image,
-                  price: p.price,
-                })
-              }
-            />
-          ))}
+        {/* Results summary */}
+        <div className="mb-4 text-sm text-gray-600">
+          Showing {filtered.length} products
+        </div>
+
+        {/* Scrollable products container */}
+        <div className="relative">
+          <div
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+            className="h-[calc(100vh-300px)] overflow-y-auto border rounded-lg p-4 bg-white scroll-smooth"
+            style={{ scrollbarWidth: "thin" }}
+          >
+            <div className="flex flex-wrap gap-4 justify-start">
+              {filtered.map((p: FakeStoreProduct) => (
+                <ProductCard
+                  key={p.id}
+                  imageUrl={p.image}
+                  name={p.title}
+                  id={String(p.id)}
+                  priceText={`$${p.price.toFixed(2)}`}
+                  onAddToCart={() =>
+                    addItem({
+                      productId: p.id,
+                      title: p.title,
+                      image: p.image,
+                      price: p.price,
+                    })
+                  }
+                />
+              ))}
+            </div>
+
+            {/* Empty state */}
+            {filtered.length === 0 && (
+              <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                <div className="text-lg font-medium mb-2">
+                  No products found
+                </div>
+                <div className="text-sm">Try adjusting your filters</div>
+              </div>
+            )}
+          </div>
+
+          {/* Scroll to top button */}
+          {showScrollTop && (
+            <button
+              onClick={scrollToTop}
+              className="fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full shadow-lg transition-all duration-200 z-10"
+              title="Scroll to top"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 10l7-7m0 0l7 7m-7-7v18"
+                />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
     </div>
