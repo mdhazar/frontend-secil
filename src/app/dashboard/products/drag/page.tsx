@@ -8,7 +8,9 @@ import {
   DragStartEvent,
 } from "@dnd-kit/core";
 import { getAllProducts } from "@/app/lib/fakestore-api";
-import ProductCard from "@/app/ui/dashboard/product-card";
+import ProductCard, {
+  ProductCardSkeleton,
+} from "@/app/ui/dashboard/product-card";
 import ProductGrid from "@/app/ui/dashboard/product-grid";
 import ConstantsGrid from "@/app/ui/dashboard/constants-grid";
 
@@ -72,23 +74,17 @@ export default function Page() {
       case "2x2":
         return {
           cols: 2,
-          rows: 2,
-          total: 4,
           gridClass: "grid-cols-2",
         } as const;
       case "4x4":
         return {
           cols: 4,
-          rows: 4,
-          total: 16,
           gridClass: "grid-cols-4",
         } as const;
       case "3x2":
       default:
         return {
           cols: 3,
-          rows: 2,
-          total: 6,
           gridClass: "grid-cols-3",
         } as const;
     }
@@ -114,26 +110,86 @@ export default function Page() {
     if (!over) return;
 
     const draggedProductData = active.data.current as Product;
-    const dropSlotIndex = parseInt(over.id as string, 10);
+    // dropSlotIndex not needed since we're using simple append logic
+    // const dropSlotIndex = parseInt(over.id as string, 10);
 
     setSelectedProducts((prev) => {
-      const next = [...prev];
-      next[dropSlotIndex] = draggedProductData;
-      const seen = new Set<string>();
-      for (let i = 0; i < next.length; i++) {
-        const item = next[i];
-        if (!item) continue;
-        if (seen.has(item.id)) {
-          next[i] = undefined as unknown as Product;
-        } else {
-          seen.add(item.id);
-        }
+      // Find if this product already exists and remove it
+      const existingIndex = prev.findIndex(
+        (p) => p.id === draggedProductData.id
+      );
+      let filteredPrev = prev;
+      if (existingIndex !== -1) {
+        filteredPrev = prev.filter((p) => p.id !== draggedProductData.id);
       }
-      return next.filter(Boolean) as Product[];
+
+      // Add the product to the array
+      // We'll let the ConstantsGrid handle the positioning
+      return [...filteredPrev, draggedProductData];
     });
   };
 
-  if (loading) return <div className="p-4">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex h-full flex-col px-2 mt-4 space-y-4">
+        <div className="mb-2 flex h-20 items-end justify-start rounded-md bg-blue-300 p-4 md:h-40"></div>
+        <div className="border p-2">
+          <div className="min-h-12 bg-gray-100 rounded-md flex items-center justify-between px-4 py-2 mb-3">
+            <div className="flex items-center gap-2 flex-wrap">
+              <input
+                className="p-2 border rounded"
+                placeholder="Search products"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div className="flex-1 flex gap-2">
+            {/* Left side - Product grid skeleton */}
+            <div className="flex-1 bg-white rounded-md p-2 flex flex-col max-h-[600px]">
+              <div className="mb-1 flex-shrink-0">
+                <h3 className="font-medium text-gray-900">Products</h3>
+              </div>
+              <div className="flex-1 overflow-y-auto border p-4">
+                <div className="grid grid-cols-3 gap-4">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <ProductCardSkeleton key={`product-skeleton-${i}`} />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right side - Pinned space skeleton */}
+            <div className="flex-1 bg-white rounded-md p-2 flex flex-col max-h-[600px]">
+              <div className="mb-1 flex-shrink-0 flex items-center justify-between">
+                <h3 className="font-medium text-gray-900">Pinned</h3>
+                <div className="flex gap-1">
+                  <div className="w-8 h-6 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="w-8 h-6 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="w-8 h-6 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+              </div>
+              <div className="flex-1 overflow-y-auto border flex flex-col">
+                <div className="flex-1 p-4 min-w-0">
+                  <div
+                    className={`grid ${gridConfig.gridClass} gap-x-[15px] gap-y-2.5 w-full`}
+                  >
+                    {Array.from({ length: 8 }).map((_, i) => (
+                      <ProductCardSkeleton
+                        key={`pinned-skeleton-${i}`}
+                        compact
+                        gridCols={gridConfig.cols}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (error) return <div className="p-4 text-red-600">{error}</div>;
 
   return (

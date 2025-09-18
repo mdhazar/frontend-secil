@@ -5,7 +5,7 @@ import { ImagePlaceholderIcon } from "@/app/ui/icons";
 type Badge = {
   label: string;
   variant?: "solid" | "outline";
-  colorClassName?: string; // Tailwind color override
+  colorClassName?: string;
 };
 
 type ProductCardLayout = "vertical" | "horizontal";
@@ -15,7 +15,7 @@ interface ProductCardProps {
   id?: string;
   name: string;
   imageUrl?: string;
-  priceText?: string; // Pre-formatted price string to avoid locale assumptions
+  priceText?: string;
   rating?: number; // 0..5
   ratingCount?: number;
   badges?: Badge[];
@@ -63,7 +63,6 @@ function getDimensions(size: ProductCardSize, layout: ProductCardLayout) {
         };
     }
   }
-  // vertical
   switch (size) {
     case "sm":
       return {
@@ -88,8 +87,8 @@ function getDimensions(size: ProductCardSize, layout: ProductCardLayout) {
       return {
         imgW: 180,
         imgH: 180,
-        containerW: "w-60",
-        containerH: "h-96",
+        containerW: "w-56",
+        containerH: "h-80",
         title: "text-base",
         price: "text-sm",
       };
@@ -171,14 +170,21 @@ export default function ProductCard({
       {layout === "vertical" ? (
         <div className="flex flex-col h-full">
           <div className="relative p-2 flex justify-center flex-shrink-0">
-            <div className="relative overflow-hidden rounded border border-gray-200">
+            <div
+              className="relative overflow-hidden rounded border border-gray-200"
+              style={{ height: `${dims.imgH}px` }}
+            >
               {imageUrl ? (
                 <Image
                   src={imageUrl}
                   alt={`Picture of ${name}`}
                   width={dims.imgW}
                   height={dims.imgH}
-                  className="object-cover"
+                  className="object-cover w-full h-full"
+                  style={{
+                    maxHeight: `${dims.imgH}px`,
+                    height: `${dims.imgH}px`,
+                  }}
                 />
               ) : (
                 <div
@@ -273,14 +279,21 @@ export default function ProductCard({
       ) : (
         <div className="p-2 flex items-start gap-3 h-full">
           <div className="relative shrink-0">
-            <div className="relative overflow-hidden rounded border border-gray-200">
+            <div
+              className="relative overflow-hidden rounded border border-gray-200"
+              style={{ height: `${dims.imgH}px`, width: `${dims.imgW}px` }}
+            >
               {imageUrl ? (
                 <Image
                   src={imageUrl}
                   alt={`Picture of ${name}`}
                   width={dims.imgW}
                   height={dims.imgH}
-                  className="object-cover"
+                  className="object-cover w-full h-full"
+                  style={{
+                    maxHeight: `${dims.imgH}px`,
+                    height: `${dims.imgH}px`,
+                  }}
                 />
               ) : (
                 <div
@@ -379,10 +392,14 @@ export function ProductCardSkeleton({
   layout = "vertical",
   size = "md",
   className,
+  compact = false,
+  gridCols,
 }: {
   layout?: ProductCardLayout;
   size?: ProductCardSize;
   className?: string;
+  compact?: boolean;
+  gridCols?: number;
 }) {
   const dims = getDimensions(size, layout);
   const shimmer = "animate-pulse";
@@ -407,7 +424,6 @@ export function ProductCardSkeleton({
             <div className="h-3 bg-gray-200 rounded w-2/5" />
             <div className="mt-auto flex items-center gap-2">
               <div className="h-7 bg-gray-200 rounded w-24" />
-              <div className="h-7 bg-gray-200 rounded w-10" />
               <div className="h-7 bg-gray-200 rounded w-16" />
             </div>
           </div>
@@ -416,32 +432,59 @@ export function ProductCardSkeleton({
     );
   }
 
-  // vertical
+  // Adjust sizing based on grid density
+  const isVeryDense = gridCols && gridCols >= 4;
+  const compactHeight = isVeryDense ? "h-36" : "h-48";
+  const imageHeight = isVeryDense ? 80 : 120;
+  const padding = isVeryDense ? "p-1" : "p-2";
+  const textPadding = isVeryDense ? "px-1 pb-1" : "px-2 pb-2";
+
   return (
     <div
       className={clsx(
         "overflow-hidden rounded-lg border border-gray-200 bg-white",
         shimmer,
-        dims.containerW,
-        dims.containerH,
+        compact ? "w-full" : dims.containerW,
+        compact ? compactHeight : dims.containerH,
         className
       )}
     >
       <div className="flex flex-col h-full">
-        <div className="p-2 flex justify-center flex-shrink-0">
+        <div className={`${padding} flex justify-center flex-shrink-0`}>
           <div
             className="bg-gray-200 rounded border border-gray-200"
-            style={{ width: dims.imgW, height: dims.imgH }}
+            style={{
+              width: compact ? "100%" : dims.imgW,
+              height: compact ? imageHeight : dims.imgH,
+              maxWidth: compact ? `${imageHeight}px` : dims.imgW,
+            }}
           />
         </div>
-        <div className="px-3 pb-3 flex flex-col gap-1 flex-grow">
-          <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto" />
-          <div className="mt-2 h-3 bg-gray-200 rounded w-1/3 ml-auto" />
-          <div className="mt-auto flex items-center gap-2">
-            <div className="h-7 bg-gray-200 rounded w-full" />
-            <div className="h-7 bg-gray-200 rounded w-10" />
-            <div className="h-7 bg-gray-200 rounded w-16" />
-          </div>
+        <div className={`${textPadding} flex flex-col gap-1 flex-grow`}>
+          <div
+            className={`${
+              isVeryDense ? "h-2" : "h-3"
+            } bg-gray-200 rounded w-3/4 mx-auto`}
+          />
+          <div
+            className={`mt-1 ${
+              isVeryDense ? "h-1.5" : "h-2"
+            } bg-gray-200 rounded w-1/3 mx-auto`}
+          />
+          {!compact && (
+            <div className="mt-auto flex items-center gap-1">
+              <div
+                className={`${
+                  isVeryDense ? "h-5" : "h-6"
+                } bg-gray-200 rounded w-full`}
+              />
+              <div
+                className={`${
+                  isVeryDense ? "h-5" : "h-6"
+                } bg-gray-200 rounded w-8`}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
