@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { inter } from "@/app/ui/fonts";
 import "./globals.css";
 import Provider from "./components/Provider";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Login App",
@@ -17,6 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <Provider>{children}</Provider>
+        <Analytics />
       </body>
     </html>
   );
