@@ -144,7 +144,7 @@ export default function ProductCard({
   ratingCount,
   badges,
   layout = "vertical",
-  size = "md",
+  size = "sm",
   className,
   disabled = false,
   isFavorite = false,
@@ -238,12 +238,12 @@ export default function ProductCard({
               </div>
             )}
 
-            <div className="mt-auto flex items-center gap-2">
+            <div className="mt-auto flex items-center gap-1">
               {showAddButton && (
                 <button
                   type="button"
                   onClick={onAddToCart}
-                  className="flex-1 text-xs bg-blue-600 text-white py-1.5 rounded hover:bg-blue-700"
+                  className="flex-1 text-xs bg-blue-600 text-white  py-1.5 rounded hover:bg-blue-700"
                   disabled={disabled}
                 >
                   Add to Cart
@@ -267,7 +267,7 @@ export default function ProductCard({
                 <button
                   type="button"
                   onClick={onQuickView}
-                  className="px-2 py-1.5 rounded border border-gray-300 text-xs text-gray-700 hover:bg-gray-50"
+                  className=" py-1.5 rounded border border-gray-300 text-xs text-gray-700 hover:bg-gray-50"
                   disabled={disabled}
                 >
                   Quick View

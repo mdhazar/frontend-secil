@@ -28,7 +28,7 @@ export default function NavLinks() {
               }
             )}
           >
-            <p className="hidden md:block">{link.name}</p>
+            <p className="flex ">{link.name}</p>
           </Link>
         );
       })}

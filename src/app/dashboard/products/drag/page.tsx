@@ -31,7 +31,7 @@ export default function Page() {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
   const [draggedProduct, setDraggedProduct] = useState<Product | null>(null);
-  const [gridLayout, setGridLayout] = useState<GridLayout>("3x2");
+  const [gridLayout, setGridLayout] = useState<GridLayout>("2x2");
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
@@ -110,11 +110,8 @@ export default function Page() {
     if (!over) return;
 
     const draggedProductData = active.data.current as Product;
-    // dropSlotIndex not needed since we're using simple append logic
-    // const dropSlotIndex = parseInt(over.id as string, 10);
 
     setSelectedProducts((prev) => {
-      // Find if this product already exists and remove it
       const existingIndex = prev.findIndex(
         (p) => p.id === draggedProductData.id
       );
@@ -123,8 +120,6 @@ export default function Page() {
         filteredPrev = prev.filter((p) => p.id !== draggedProductData.id);
       }
 
-      // Add the product to the array
-      // We'll let the ConstantsGrid handle the positioning
       return [...filteredPrev, draggedProductData];
     });
   };
@@ -141,49 +136,6 @@ export default function Page() {
                 placeholder="Search products"
                 disabled
               />
-            </div>
-          </div>
-
-          <div className="flex-1 flex gap-2">
-            {/* Left side - Product grid skeleton */}
-            <div className="flex-1 bg-white rounded-md p-2 flex flex-col max-h-[600px]">
-              <div className="mb-1 flex-shrink-0">
-                <h3 className="font-medium text-gray-900">Products</h3>
-              </div>
-              <div className="flex-1 overflow-y-auto border p-4">
-                <div className="grid grid-cols-3 gap-4">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <ProductCardSkeleton key={`product-skeleton-${i}`} />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Right side - Pinned space skeleton */}
-            <div className="flex-1 bg-white rounded-md p-2 flex flex-col max-h-[600px]">
-              <div className="mb-1 flex-shrink-0 flex items-center justify-between">
-                <h3 className="font-medium text-gray-900">Pinned</h3>
-                <div className="flex gap-1">
-                  <div className="w-8 h-6 bg-gray-200 rounded animate-pulse"></div>
-                  <div className="w-8 h-6 bg-gray-200 rounded animate-pulse"></div>
-                  <div className="w-8 h-6 bg-gray-200 rounded animate-pulse"></div>
-                </div>
-              </div>
-              <div className="flex-1 overflow-y-auto border flex flex-col">
-                <div className="flex-1 p-4 min-w-0">
-                  <div
-                    className={`grid ${gridConfig.gridClass} gap-x-[15px] gap-y-2.5 w-full`}
-                  >
-                    {Array.from({ length: 8 }).map((_, i) => (
-                      <ProductCardSkeleton
-                        key={`pinned-skeleton-${i}`}
-                        compact
-                        gridCols={gridConfig.cols}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
